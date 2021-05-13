@@ -37,20 +37,25 @@ class PublicPlaylist:
                 return playlist['name']
         return None
 
-    
+    #returns query format given track name
+    def format_song(self, track):
+        track = track.split('-')
+        if len(track) == 2:            
+            #title[1] is the song name
+            #title[0] is the artist                                  
+            return self.get_id(f"track:{track[1].strip()} artist:{track[0].strip()})")
+        return None
+
+
     #adds songs to playlist based on the freshest r/hiphopheads post
     def add_songs(self):
         id = []
         posts = reddit.get_latest_fresh_posts()
-        for title in posts:
-            title = title.split('-')
-            if len(title) == 2:            
-                #title[1] is the song name
-                #title[0] is the artist                                  
-                song_id = self.get_id(f"track:{title[1].strip()} artist:{title[0].strip()})")
-                if song_id is not None:
-                    print(f"{song_id} was added")
-                    id.append(song_id)
+        for title in posts:               
+            song_id = self.format_song(track=title)
+            if song_id is not None:
+                print(f"{song_id} was added")
+                id.append(song_id)
         self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, id, position=None) 
 
     
@@ -77,3 +82,7 @@ class PrivatePlaylist(PublicPlaylist):
     def create_playlist(self, name, description):
         self.user_authorization.user_playlist_create(user=self.user, name=name, public=False, 
                                                     collaborative=None, description=description)
+
+
+
+#make it easier to test Reddit query and finding valid songs
