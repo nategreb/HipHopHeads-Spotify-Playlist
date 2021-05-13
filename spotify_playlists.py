@@ -51,7 +51,7 @@ class PublicPlaylist:
                 if song_id is not None:
                     print(f"{song_id} was added")
                     id.append(song_id)
-        self.user_authorization.user_playlist_add_tracks(user, playlist_id, id, position=None) 
+        self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, id, position=None) 
 
     
     #same methodology of add_songs but removes all occurences at the end. 
@@ -68,7 +68,7 @@ class PublicPlaylist:
                 if song_id is not None:
                     print(f"{song_id} was removed")
                     id.append(song_id)
-        self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, id)  
+        self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, playlist_id, id)  
 
         
 #Private playlists need a different authorization scope 
