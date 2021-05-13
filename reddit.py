@@ -47,7 +47,7 @@ get_string = lambda s: s.split('[')[0] + s.split(']')[-1]
 #get_latest_fresh_posts(): [String]
 def get_latest_fresh_posts():
     fresh_posts = []
-    for hot_submission in hiphopheads.hot(limit=1000):
+    for hot_submission in hiphopheads.hot(limit=2000):
         if (
             hot_submission.link_flair_text is not None and 
             (hot_submission.link_flair_text.lower() == "fresh" or hot_submission.link_flair_text.lower() == "fresh video") or 
