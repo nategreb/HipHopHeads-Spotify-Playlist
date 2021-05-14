@@ -48,10 +48,14 @@ class PublicPlaylist:
 
 
     #adds songs to playlist based on the freshest r/hiphopheads post
-    def add_songs(self):
+    #need to include SPOTIFY's RATE LIMITING
+    def add_songs(self, get_songs):
         id = []
-        posts = reddit.get_latest_fresh_posts()
-        for title in posts:               
+        posts = get_songs()
+        for title in posts:        
+            #spotify has max       
+            if len(id) > 100:
+                break
             song_id = self.format_song(track=title)
             if song_id is not None:
                 print(f"{song_id} was added")
@@ -59,21 +63,38 @@ class PublicPlaylist:
         self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, id, position=None) 
 
     
+    #adds just the songs from the hottest posts
+    def add_hot_songs(self):
+        self.add_songs(reddit.get_hottest_posts)
+    
+
+    #adds the songs from the hottest posts with the Fresh tag
+    #tags have limited use, unfortunately...
+    def add_fresh_songs(self):
+        self.add_songs(reddit.get_latest_fresh_posts)
+
+
+    #reverse of adding freshest songs
+    def remove_fresh_songs(self):
+        self.clear_playlist(reddit.get_latest_fresh_posts)
+
+    
+    #reverse of adding hottest songs
+    def remove_hot_songs(self):
+        self.clear_playlist(reddit.get_hottest_posts)
+    
+
     #same methodology of add_songs but removes all occurences at the end. 
     #assuming reddit.getId is kept constant with query limit, 
-    def clear_playlist(self):           
+    def clear_playlist(self, get_songs):           
         id = []
-        posts = reddit.get_latest_fresh_posts()
+        posts = get_songs()
         for title in posts:
-            title = title.split('-')
-            if len(title) == 2:            
-                #title[0] is the artist    
-                #title[1] is the song name                                              
-                song_id = self.get_id(f"track:{title[1].strip()} artist:{title[0].strip()})")
-                if song_id is not None:
-                    print(f"{song_id} was removed")
-                    id.append(song_id)
-        self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, playlist_id, id)  
+            song_id = self.format_song(track=title)
+            if song_id is not None:
+                print(f"{song_id} was remove")
+                id.append(song_id)
+        self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, self.playlist_id, id)  
 
         
 #Private playlists need a different authorization scope 
@@ -85,4 +106,13 @@ class PrivatePlaylist(PublicPlaylist):
 
 
 
-#make it easier to test Reddit query and finding valid songs
+#get the HIT rate of number of querys with matching spotify IDs from total FRESH posts 
+def hit_rate():
+    id = []
+    playlist = PublicPlaylist()
+    posts = reddit.get_latest_fresh_posts()
+    for title in posts:               
+        song_id = playlist.format_song(track=title)
+        if song_id is not None:
+            id.append(song_id)
+    print(float(len(id))/float(len(posts)))
