@@ -1,4 +1,5 @@
 env.sh
 launch.json
-.cache
-.cache-nate.greb
+/__pycache__
+.cache*
+current_songs.txt
