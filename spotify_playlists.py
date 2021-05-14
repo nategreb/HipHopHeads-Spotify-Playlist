@@ -8,14 +8,15 @@ from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 
 #query string example: "track:Dyno artist:Jay Critch"
 
-
+#NEED TO FIND BETTER WAY OF CLEARING PLAYLIST. INNEFICIENT IF IT ISNT DONE RIGHT AWAY
+#NEED TO CHECK FOR DUPLICATES?
 class PublicPlaylist:
     user = os.environ["SPOTIFY_USER"]
     playlist_id = os.environ["PLAYLIST_ID"]
     scope = "playlist-modify-public"
     client = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) #doesn't access user information. endpoints with authorization can't be accesed
     user_authorization = spotipy.Spotify(oauth_manager=SpotifyOAuth(scope=scope, username=user)) #username
-
+    
 
     #returns track ID. else, NoneType.
     def get_id(self, query):
@@ -24,18 +25,27 @@ class PublicPlaylist:
             return result['tracks']['items'][0]['id']
 
 
+    #creates a playlist given a name and description    
     def create_playlist(self, name, description):
         self.user_authorization.user_playlist_create(user=self.user, name=name, public=True, 
                             collaborative=None, description=description)
 
 
     #returns the playlist ID: String
-    def get_playlist_id(self, playlist_name):
-        playlists = user_authorization.user_playlists(user)
-        for playlist in playlists['items']:  # iterate through playlists I follow
-            if playlist['name'] == playlist_name:  # filter for newly created playlist
-                return playlist['name']
-        return None
+    #optional 'name' argument. Returns current id if name is null or not found.
+    def get_playlist_id(self, **kwargs):
+        if len(kwargs) > 0:
+            playlists = self.user_authorization.user_playlists(self.user)
+            for playlist in playlists['items']:  
+                if playlist['name'] == kwargs['name']:  
+                    return playlist['id']
+        return self.playlist_id 
+
+    
+    #set the playlist_id based on name of playlist
+    def set_playlist_id(self, name):
+        self.playlist_id = self.get_playlist_id(name=name)
+
 
     #returns query format given track name
     def format_song(self, track):
@@ -84,17 +94,10 @@ class PublicPlaylist:
         self.clear_playlist(reddit.get_hottest_posts)
     
 
-    #same methodology of add_songs but removes all occurences at the end. 
-    #assuming reddit.getId is kept constant with query limit, 
+    #removes songs from playlist
     def clear_playlist(self, get_songs):           
-        id = []
-        posts = get_songs()
-        for title in posts:
-            song_id = self.format_song(track=title)
-            if song_id is not None:
-                print(f"{song_id} was remove")
-                id.append(song_id)
-        self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, self.playlist_id, id)  
+        with open("current_songs.txt") as curr_songs:
+            self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, curr_songs.read().splitlines(), position=None) 
 
         
 #Private playlists need a different authorization scope 
