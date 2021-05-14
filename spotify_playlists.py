@@ -84,20 +84,11 @@ class PublicPlaylist:
         self.add_songs(reddit.get_latest_fresh_posts)
 
 
-    #reverse of adding freshest songs
-    def remove_fresh_songs(self):
-        self.clear_playlist(reddit.get_latest_fresh_posts)
-
-    
-    #reverse of adding hottest songs
-    def remove_hot_songs(self):
-        self.clear_playlist(reddit.get_hottest_posts)
-    
 
     #removes songs from playlist
     def clear_playlist(self, get_songs):           
         with open("current_songs.txt") as curr_songs:
-            self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, curr_songs.read().splitlines(), position=None) 
+            self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, self.playlist_id, curr_songs.read().splitlines()) 
 
         
 #Private playlists need a different authorization scope 
