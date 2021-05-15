@@ -1,13 +1,9 @@
 import os
 
 from spotify_playlists import PublicPlaylist
-import reddit
-
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 
 
-
+#use this for testing environment 
 def main():
     playlist = PublicPlaylist()
     playlist.add_songs()

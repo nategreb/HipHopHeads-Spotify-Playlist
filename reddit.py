@@ -5,12 +5,12 @@ import os
 import praw
 
 #IDEA: get_latest_fresh_posts(): increase performence with threads?
-#REdditgives you 600 requests every 10 minutes: 1 request every second
+#REddit gives you 600 requests every 10 minutes: 1 request every second
 
 reddit = praw.Reddit(
-    client_id=os.environ["REDDIT_CLIENT_ID"],
-    client_secret=os.environ["REDDIT_CLIENT_SECRET"],
-    user_agent=os.environ["REDDIT_USER_AGENT"]
+    client_id=os.environ["REDDIT_CLIENT_ID"], #replace with Reddit API app ID
+    client_secret=os.environ["REDDIT_CLIENT_SECRET"], #API app key
+    user_agent=os.environ["REDDIT_USER_AGENT"] #from API app
 )
 
 #r/subreddit

@@ -8,13 +8,13 @@ from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 
 #query string example: "track:Dyno artist:Jay Critch"
 
-#NEED TO FIND BETTER WAY OF CLEARING PLAYLIST. INNEFICIENT IF IT ISNT DONE RIGHT AWAY
-#NEED TO CHECK FOR DUPLICATES?
+
 class PublicPlaylist:
-    user = os.environ["SPOTIFY_USER"]
-    playlist_id = os.environ["PLAYLIST_ID"]
-    scope = "playlist-modify-public"
-    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) #doesn't access user information. endpoints with authorization can't be accesed
+    user = os.environ["SPOTIFY_USER"] #replace with your username
+    playlist_id = os.environ["PLAYLIST_ID"] #replace with the playlist id you want. You can also use the below methods to set it
+    scope = "playlist-modify-public" #spotify has different authorization scopes
+    #client doesn't access user information. endpoints with authorization can't be accesed
+    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) 
     user_authorization = spotipy.Spotify(oauth_manager=SpotifyOAuth(scope=scope, username=user)) #username
     
 
@@ -89,7 +89,9 @@ class PublicPlaylist:
     #removes songs from playlist
     def clear_playlist(self):           
        with open("current_songs.txt") as curr_songs:      
-            self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, self.playlist_id, curr_songs.read().splitlines()) 
+            self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, 
+                                                                                   self.playlist_id, 
+                                                                                   curr_songs.read().splitlines()) 
 
         
 #Private playlists need a different authorization scope 
