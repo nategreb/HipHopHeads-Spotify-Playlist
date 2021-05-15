@@ -14,6 +14,6 @@ For spotify_playlists.py and Spotify API:
 For reddit.py and Reddit API:
   This module is more hard coded and directly intended for r/HipHopHeads. As seen in the file, either create environment variables as depicted, or instantiate them       
   directly. The general format for scraping this subreddit is by taking the titles of the posts which, for the most part, are in the format "[AUTHOR] - [SONG]". 
-  Overall, requesting the Reddit API with higher limits is pretty slow.
+  Overall, requesting the Reddit API with larger limits is pretty slow.
   
 

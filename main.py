@@ -1,11 +1,20 @@
 import os
+import time
 
 from spotify_playlists import PublicPlaylist
 
+playlist = PublicPlaylist()
 
-#use this for testing environment 
+#main script for HipHopHeads playlist
 def main():
-    playlist = PublicPlaylist()
-    playlist.add_songs()
+    while(1):
+        playlist.add_hot_songs()
+        time.sleep(604800)
+        playlist.clear_playlist()
+                
+
+if __name__ == "__main__":
+    main()
+
 
     

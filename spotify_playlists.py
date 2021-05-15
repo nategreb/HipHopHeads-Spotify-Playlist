@@ -13,9 +13,10 @@ class PublicPlaylist:
     user = os.environ["SPOTIFY_USER"] #replace with your username
     playlist_id = os.environ["PLAYLIST_ID"] #replace with the playlist id you want. You can also use the below methods to set it
     scope = "playlist-modify-public" #spotify has different authorization scopes
+    
     #client doesn't access user information. endpoints with authorization can't be accesed
-    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials()) 
-    user_authorization = spotipy.Spotify(oauth_manager=SpotifyOAuth(scope=scope, username=user)) #username
+    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())  #read read.me
+    user_authorization = spotipy.Spotify(oauth_manager=SpotifyOAuth(scope=scope, username=user)) #read read.me 
     
 
     #returns track ID. else, NoneType.
@@ -62,7 +63,7 @@ class PublicPlaylist:
     def add_songs(self, get_songs):
         ids = []
         posts = get_songs()
-        with open('test.txt', 'w') as file:
+        with open('current_songs.txt', 'w') as file:
             for title in posts:        
                 #spotify has max       
                 if len(ids) > 100:
@@ -87,11 +88,12 @@ class PublicPlaylist:
 
 
     #removes songs from playlist
-    def clear_playlist(self):           
-       with open("current_songs.txt") as curr_songs:      
+    def clear_playlist(self):                  
+       with open("current_songs.txt", "r+") as curr_songs:      
             self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, 
                                                                                    self.playlist_id, 
                                                                                    curr_songs.read().splitlines()) 
+            curr_songs.truncate(0)
 
         
 #Private playlists need a different authorization scope 
