@@ -60,17 +60,18 @@ class PublicPlaylist:
     #adds songs to playlist based on the freshest r/hiphopheads post
     #need to include SPOTIFY's RATE LIMITING
     def add_songs(self, get_songs):
-        id = []
+        ids = []
         posts = get_songs()
-        for title in posts:        
-            #spotify has max       
-            if len(id) > 100:
-                break
-            song_id = self.format_song(track=title)
-            if song_id is not None:
-                print(f"{song_id} was added")
-                id.append(song_id)
-        self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, id, position=None) 
+        with open('test.txt', 'w') as file:
+            for title in posts:        
+                #spotify has max       
+                if len(ids) > 100:
+                    break
+                song_id = self.format_song(track=title)
+                if song_id is not None:                    
+                    ids.append(song_id)    
+                    file.write(f"{song_id}\n")
+        self.user_authorization.user_playlist_add_tracks(self.user, self.playlist_id, ids, position=None) 
 
     
     #adds just the songs from the hottest posts
@@ -86,8 +87,8 @@ class PublicPlaylist:
 
 
     #removes songs from playlist
-    def clear_playlist(self, get_songs):           
-        with open("current_songs.txt") as curr_songs:
+    def clear_playlist(self):           
+       with open("current_songs.txt") as curr_songs:      
             self.user_authorization.user_playlist_remove_all_occurrences_of_tracks(self.user, self.playlist_id, curr_songs.read().splitlines()) 
 
         

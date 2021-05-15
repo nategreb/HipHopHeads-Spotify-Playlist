@@ -2,4 +2,4 @@ env.sh
 launch.json
 /__pycache__
 .cache*
-current_songs.txt
+test.txt
