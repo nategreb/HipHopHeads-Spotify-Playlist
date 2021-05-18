@@ -48,6 +48,3 @@ def get_id(query, kind):
     if len(result) > 0 and len(result[kind+'s']['items']) > 0:
         return result[kind+'s']['items'][0]['id']
     return None
-
-
-print(get_recommended_tracks(['Kanye West'], ['rap'], ['Monster']))
