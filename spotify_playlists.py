@@ -8,20 +8,22 @@ from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 
 #query string example: "track:Dyno artist:Jay Critch"
 
+#client doesn't access user information. endpoints with authorization can't be accesed
+client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())  #read read.me
+
 
 class PublicPlaylist:
     user = os.environ["SPOTIFY_USER"] #replace with your username
     playlist_id = os.environ["PLAYLIST_ID"] #replace with the playlist id you want. You can also use the below methods to set it
     scope = "playlist-modify-public" #spotify has different authorization scopes
     
-    #client doesn't access user information. endpoints with authorization can't be accesed
-    client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())  #read read.me
+    
     user_authorization = spotipy.Spotify(oauth_manager=SpotifyOAuth(scope=scope, username=user)) #read read.me 
     
 
     #returns track ID. else, NoneType.
     def get_id(self, query):
-        result = self.client.search(q=query, type="track", limit=1, market="US")
+        result = client.search(q=query, type="track", limit=1, market="US")
         if len(result) > 0 and len(result['tracks']['items']) > 0:
             return result['tracks']['items'][0]['id']
 

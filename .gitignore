@@ -3,3 +3,4 @@ launch.json
 __pycache__*
 .cache*
 test.txt
+ideas.txt
