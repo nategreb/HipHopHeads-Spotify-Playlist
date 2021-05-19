@@ -21,6 +21,8 @@ def get_recommended_tracks(artists, genres, tracks):
     return None 
 
 
+#artists: String[]
+#returns a list of ids associated to the artists
 def seed_artists(artists):
     ids = []
     artists = artists[:5]
@@ -31,6 +33,8 @@ def seed_artists(artists):
     return ids
 
 
+#tracks: String[]
+#returns a list of ids associated to the tracks
 def seed_tracks(tracks):
     ids = []
     tracks = tracks[:5]
@@ -39,6 +43,7 @@ def seed_tracks(tracks):
         if id is not None:
             ids.append(id)
     return ids
+
 
 #helper function for getting an id 
 #(query: String, kind: String)
